@@ -15,6 +15,8 @@ Run the projet
 ```bash
 uv sync
 ./main.py
+# works for me
+#uv run main.py
 ```
 
 ## Usage
@@ -27,4 +29,6 @@ It's a free developer friendly replacement for Postman. Then open the collection
 
 ```bash
 python -m pytest tests/ -v
+# works for me
+#uv run -m pytest tests/ -v
 ```
