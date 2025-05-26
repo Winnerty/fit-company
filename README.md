@@ -2,6 +2,8 @@
 
 The fit monolith is a blazing fast, cutting edge AI fitness coach
 
+## TEAM: Timofey Karpeev, Aleksei Shmakov, Aleksandr Blokhin
+
 ## Getting Started
 
 Start the database with docker compose
