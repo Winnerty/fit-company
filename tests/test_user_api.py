@@ -74,12 +74,9 @@ class TestUserAPI(unittest.TestCase):
         )
         
         # Assert response
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, 400)
         data = json.loads(response.data)
-        self.assertEqual(data['email'], invalid_user['email'])
-        self.assertEqual(data['name'], invalid_user['name'])
-        self.assertEqual(data['role'], invalid_user['role'])
-        self.assertIn('password', data)  # auto generated password should be present
+        self.assertIn('error', data)
 
 if __name__ == '__main__':
     unittest.main() 
