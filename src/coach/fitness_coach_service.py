@@ -1,5 +1,8 @@
 import logging
 import os
+import pika
+import json
+from datetime import date
 from typing import List, Tuple
 
 import requests
@@ -48,7 +51,15 @@ def save_workout_exercises(user_email: str, exercise_ids: List[int]):
     monolith_url = os.getenv("MONOLITH_URL")
     headers = {"X-API-Key": os.getenv("FIT_API_KEY")}
     requests.post(f"{monolith_url}/workouts/", headers=headers, json={"email": user_email, "exercises": exercise_ids})
+    save_workout_exercises(user_email, [exercise.id for exercise in selected_exercises])
 
+    workout_event = {
+        "user_id": user_email,
+        "date": date.today().isoformat(),
+        "workout_type": "wod",
+        "exercises": [ex.id for ex in selected_exercises]
+    }
+    publish_workout_created_event(workout_event)
 
 def create_wod_for_user(user_email: str) -> List[Tuple[ExerciseModel, List[Tuple[MuscleGroupModel, bool]]]]:
     """
@@ -105,3 +116,21 @@ def create_wod_for_user(user_email: str) -> List[Tuple[ExerciseModel, List[Tuple
         return result
     finally:
         db.close()
+
+def publish_workout_created_event(message: dict):
+    connection = pika.BlockingConnection(
+        pika.ConnectionParameters(
+            host='rabbitmq',
+            port=5672,
+            credentials=pika.PlainCredentials('rabbit', 'docker')
+        )
+    )
+    channel = connection.channel()
+    channel.queue_declare(queue='workoutCreatedQueue', durable=True)
+    channel.basic_publish(
+        exchange='',
+        routing_key='workoutCreatedQueue',
+        body=json.dumps(message),
+        properties=pika.BasicProperties(delivery_mode=2)
+    )
+    connection.close()
