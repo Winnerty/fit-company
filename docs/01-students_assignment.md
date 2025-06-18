@@ -75,3 +75,5 @@ We cannot afford to have downtime during the migration.
     - They should communicate through synchronous blocking
   - All Used APIs should be documented using OpenAPI spec
   - Migration guide using a strangler fig pattern stored inadr/02-coach-service-migration.md
+
+  //test changes
