@@ -17,6 +17,7 @@ class UserModel(Base):
     height = Column(Float, nullable=True)
     fitness_goal = Column(String, nullable=True)
     onboarded = Column(String, default="false", nullable=False)
+    premium_status = Column(Boolean, default=False, nullable=False)
 
     # Relationships
     workouts = relationship("WorkoutModel", back_populates="user")
