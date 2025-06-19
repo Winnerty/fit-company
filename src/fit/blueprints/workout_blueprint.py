@@ -3,6 +3,10 @@ from pydantic import ValidationError
 from ..models_dto import  RegisterWorkoutSchema
 from ..services.workout_service import get_most_recent_workout_exercises, get_user_next_workout, perform_workout, register_workout
 from ..services.auth_service import  api_key_required, jwt_required
+from ..services.rabbitmq_service import rabbitmq_service
+from ..queue_messages import CreateWodMessage
+import datetime
+
 
 workout_bp = Blueprint('workout', __name__)
    
@@ -38,7 +42,7 @@ def create_workout():
     except Exception as e:
         return jsonify({"error": "Error registering workout", "details": str(e)}), 500 
     
-@workout_bp.route("/<int:workout_id>/perform", methods=["POST"])
+@workout_bp.route("/perform/<int:workout_id>", methods=["POST"])
 @jwt_required
 def perform_workout_api(workout_id: int):
     try:
@@ -60,4 +64,4 @@ def get_next_workout_to_perform():
         return exercises.model_dump_json(), 200
         
     except Exception as e:
-        return jsonify({"error": "Error retrieving unperformed workout", "details": str(e)}), 500 
+        return jsonify({"error": "Error retrieving unperformed workout", "details": str(e)}), 500

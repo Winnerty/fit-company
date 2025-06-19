@@ -1,0 +1,22 @@
+meta {
+  name: make payment billing info
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{billing-endpoint}}/billing/make_payment
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "save_billing_info": true,
+    "credit_card_number": "1111111111111111",
+    "expiration_date": "01/26",
+    "cvv": 123,
+    "card_holder_name": "JANE DOE",
+    "email": "jane.doe@mail.com"
+  }
+}

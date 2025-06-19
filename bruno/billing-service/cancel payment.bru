@@ -1,0 +1,17 @@
+meta {
+  name: cancel payment
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{billing-endpoint}}/billing/cancel_subscription
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "email": "jane.doe@mail.com"
+  }
+}

@@ -66,6 +66,23 @@ def create_bootstrap_admin():
     except Exception as e:
         return jsonify({"error": "Error creating admin", "details": str(e)}), 500
 
+@app.route("/users/premium", methods=["POST"])
+def get_if_premium_user():
+    try:
+        email = request.json.get("email")
+        if not email:
+            return jsonify({"error": "email is required"}), 400
+            
+        db = db_session()
+        user = db.query(UserModel).filter(UserModel.email == email).first()
+        db.close()
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+        return jsonify({"is_premium": user.is_premium}), 200
+    except Exception as e:
+        return jsonify({"error": "Error checking user premium status", "details": str(e)}), 500
+    
+
 def run_app():
     """Entry point for the application script"""
     # Initialize the database before starting the app

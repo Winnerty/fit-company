@@ -28,7 +28,8 @@ def create_user(user: UserSchema) -> UserResponseSchema:
         email=user.email,
         name=user.name,
         role=user.role,
-        password_hash=hashed_password
+        password_hash=hashed_password,
+        premium_status=False,
     )
     
     # Add and commit to database

@@ -1,0 +1,17 @@
+meta {
+  name: make payment no info
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{billing-endpoint}}/billing/make_payment
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "email": "jane.doe@mail.com"
+  }
+}
