@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 
-from .billing_service import make_payment_no_billing, make_payment_billing
+from .billing_service import make_payment_no_billing, make_payment_billing, cancel_subscription
 from .database import init_db, db_session
 from .models_db import BillingInfoModel
 app = Flask(__name__)
@@ -36,17 +36,15 @@ def make_payment():
         return jsonify({"error": "Error processing payment", "details": str(e)}), 500
 
 @app.route("/billing/cancel_subscription", methods=["POST"])
-def cancel_subscription():
+def cancel():
     try:
         data = request.get_json()
         email = data.get("email")
         if not email:
             return jsonify({"error": "Email is required"}), 400
         
-        if make_payment_billing(email):
-            return jsonify({"message": "Subscription canceled"}), 200
-        else:
-            return jsonify({"error": "Error canceling subscription"}), 400
+        cancel_subscription(email)
+        return jsonify({"message": "Subscription canceled"}), 200
     except Exception as e:
         return jsonify({"error": "Error canceling subscription", "details": str(e)}), 500
 

@@ -53,3 +53,6 @@ def send_users_who_paid(email):
 
 def cancel_subscription(email):
     rabbitmq_service.publish_message_cancel({"id": email, "message": "User has canceled subscription"})
+
+
+print(1)

@@ -102,18 +102,17 @@ class RabbitMQService:
         try:
             self.ensure_connection()
             
-            message_data = message.model_dump()
-            logger.debug(f"Publishing message to queue '{self.queue_name}': {message_data}")
+            logger.debug(f"Publishing message to queue '{self.queue_name}': {message}")
             
             self.channel.basic_publish(
                 exchange="",
                 routing_key=f"{self.queue_name}-canceled",
-                body=json.dumps(message_data),
+                body=json.dumps(message),
                 properties=pika.BasicProperties(
                     delivery_mode=2,  # make message persistent
                 )
             )
-            logger.info(f"Successfully published create WOD message for user: {message_data.get('email', 'unknown')}")
+            # logger.info(f"Successfully published create WOD message for user: {message_data.get('email', 'unknown')}")
             return True
         except Exception as e:
             logger.error(f"Failed to publish message to RabbitMQ: {str(e)}", exc_info=True)
